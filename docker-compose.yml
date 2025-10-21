@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # servicio del chatbot
+  chatbot_service:
+    build: .
+    container_name: chatbot_service
+    volumes:
+      - .:/app
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: on-failure
+    command: python chat-bot_service.py
+
+    # cargamos las variables de entorno desde el archivo
+    env_file:
+      - .env 
+
+  # servicio de RabbitMQ
+  rabbitmq:
+    image: "rabbitmq:3.13-management"
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # servicio de Redis
+  redis:
+    image: "redis:7.2-alpine"
+    container_name: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
