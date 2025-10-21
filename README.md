@@ -1,3 +1,6 @@
+    - Renato Ramírez   | ROL: 202173639-5
+    - Matias Torrejon  | ROL: 202173543-7
+
 # Chatbot Académico - Microservicio
 
 Este proyecto implementa un microservicio de chatbot académico que responde preguntas frecuentes usando Redis y RabbitMQ. Todo el sistema se ejecuta a traves de Docker Compose.
